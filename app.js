@@ -1,28 +1,31 @@
-
-
+// Init Github
 const github = new Github;
+// Init UI
 const ui = new UI;
+
 // Search input
 const searchUser = document.getElementById('searchUser');
-// add event listener to input
-searchUser.addEventListener('keyup', (e) =>{
-  // get input text
-  const inputText = e.target.value;
-  // check if the input is not empty
-  if(inputText !==''){
-    // make HTTP call
-github.getUser(inputText).then(data => {
-  if(data.profile.message === 'Not Found'){
-    // show alert
 
-  }else{
-// show profile
-ui.showProfile(data.profile);
+// Search input event listener
+searchUser.addEventListener('keyup', (e) => {
+  // Get input text
+  const userText = e.target.value;
+
+  if(userText !== ''){
+   // Make http call
+   github.getUser(userText)
+    .then(data => {
+      if(data.profile.message === 'Not Found') {
+        // Show alert
+        ui.showAlert('User not found', 'alert alert-danger');
+      } else {
+        // Show profile
+        ui.showProfile(data.profile);
+        ui.showRepos(data.repos);
+      }
+    })
+  } else {
+    // Clear profile
+    ui.clearProfile();
   }
-})
-    
-}else{
-  // clear profile if theres no username that machs
-}
-
-});
+}); 
